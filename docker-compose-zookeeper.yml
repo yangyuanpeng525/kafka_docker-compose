@@ -1,0 +1,75 @@
+version: '3'
+services:
+  zookeeper1:
+    image: registry.cn-hangzhou.aliyuncs.com/yangyuanpeng/zookeeper:5.1.0
+    environment:
+      - TZ=Asia/Shanghai
+      - ZOOKEEPER_SERVER_ID=1
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ZOOKEEPER_TICK_TIME=2000
+      - ZOOKEEPER_INIT_LIMIT=5
+      - ZOOKEEPER_SYNC_LIMIT=2
+      - ZOOKEEPER_SERVERS=0.0.0.0:2887:3887;zookeeper2:2888:3888;zookeeper3:2889:3889
+    volumes:
+      - zk1data:/var/lib/zookeeper/data
+      - /etc/localtime:/etc/localtime
+      - zk1log:/var/lib/zookeeper/log
+      - zk1secrets:/etc/zookeeper/secrets
+    ports:
+      - 2181:2181
+    networks:
+      - kafka_net
+  zookeeper2:
+    image: zookeeper:5.1.0
+    environment:
+      - TZ=Asia/Shanghai
+      - ZOOKEEPER_SERVER_ID=2
+      - ZOOKEEPER_CLIENT_PORT=2182
+      - ZOOKEEPER_TICK_TIME=2000
+      - ZOOKEEPER_INIT_LIMIT=5
+      - ZOOKEEPER_SYNC_LIMIT=2
+      - ZOOKEEPER_SERVERS=zookeeper1:2887:3887;0.0.0.0:2888:3888;zookeeper3:2889:3889
+    volumes:
+      - zk2data:/var/lib/zookeeper/data
+      - /etc/localtime:/etc/localtime
+      - zk2log:/var/lib/zookeeper/log
+      - zk2secrets:/etc/zookeeper/secrets
+    ports:
+      - 2182:2182
+    networks:
+      - kafka_net
+  zookeeper3:
+    image: zookeeper:5.1.0
+    environment:
+      - TZ=Asia/Shanghai
+      - ZOOKEEPER_SERVER_ID=3
+      - ZOOKEEPER_CLIENT_PORT=2183
+      - ZOOKEEPER_TICK_TIME=2000
+      - ZOOKEEPER_INIT_LIMIT=5
+      - ZOOKEEPER_SYNC_LIMIT=2
+      - ZOOKEEPER_SERVERS=zookeeper1:2887:3887;zookeeper2:2888:3888;0.0.0.0:2889:3889
+    volumes:
+      - zk3data:/var/lib/zookeeper/data
+      - /etc/localtime:/etc/localtime
+      - zk3log:/var/lib/zookeeper/log
+      - zk3secrets:/etc/zookeeper/secrets
+    ports:
+      - 2183:2183
+    networks:
+      - kafka_net
+
+volumes:
+  zk1data:
+  zk2data:
+  zk3data:
+
+  zk1log:
+  zk1secrets:
+  zk2log:
+  zk2secrets:
+
+  zk3log:
+  zk3secrets:
+networks:
+  kafka_net:
+    external: true

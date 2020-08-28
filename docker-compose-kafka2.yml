@@ -1,0 +1,31 @@
+version: '3'
+services:
+  kafka2:
+    image: registry.cn-hangzhou.aliyuncs.com/yangyuanpeng/kafka:5.1.0.1
+    environment:
+      - TZ=Asia/Shanghai
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper1:2181,zookeeper2:2182,zookeeper3:2183
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.200.80:9093
+      - KAFKA_BROKER_ID=2
+      - KAFKA_NUM_PARTITIONS=8
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=2
+    volumes:
+      - kafka2data:/var/lib/kafka/data
+      - /etc/localtime:/etc/localtime
+      - kafka2secrets:/etc/kafka/secrets
+      - kafka2logs:/var/log/kafka-server-logs
+      - kafka2GClogs:/var/log/kafka
+    ports:
+      - "9093:9093"
+    networks:
+      - kafka_net
+
+
+volumes:
+  kafka2data:
+  kafka2secrets:
+  kafka2logs:
+  kafka2GClogs:
+networks:
+  kafka_net:
+    external: true
