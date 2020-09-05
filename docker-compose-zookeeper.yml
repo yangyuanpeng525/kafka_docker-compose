@@ -20,7 +20,7 @@ services:
     networks:
       - kafka_net
   zookeeper2:
-    image: zookeeper:5.1.0
+    image: registry.cn-hangzhou.aliyuncs.com/yangyuanpeng/zookeeper:5.1.0
     environment:
       - TZ=Asia/Shanghai
       - ZOOKEEPER_SERVER_ID=2
@@ -39,7 +39,7 @@ services:
     networks:
       - kafka_net
   zookeeper3:
-    image: zookeeper:5.1.0
+    image: registry.cn-hangzhou.aliyuncs.com/yangyuanpeng/zookeeper:5.1.0
     environment:
       - TZ=Asia/Shanghai
       - ZOOKEEPER_SERVER_ID=3
